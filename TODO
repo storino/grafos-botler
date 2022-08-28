@@ -1,0 +1,50 @@
+Ideias
+	-	Queremos encontrar um caminho de comprimento n-1 em K_n com restrições 
+		(algumas cores têm que aparecer duas vezes, outras uma vez)
+			Será que podemos buscar esse caminho em outro grafo (e.g. K_{2n}) 
+			de forma que possamos "dobrar" o caminho no grafo grande e obter um caminho no grafo pequeno?
+			
+	-	Aparentemente estamos encontrando um padrão no caso k=(n+1)/2.
+		O padrão é um caminho simétrico
+			Podemos modificar nosso programa para encontrar caminhos simétricos
+			isso é, para cada aresta, temos que identificar qual é a aresta simétrica dela
+				Fácil: se a aresta é e=(x,y), sua simétria é e'=(7-x,7-y)
+				Com isso incluímos a equação x[e]==x[e'] no programa, para cada aresta.
+				Há um caso especial que é a aresta do tipo 1 no meio do caminho.
+					Neste caso sabemos que a aresta tem que estar no caminho, basta incluir x[e]==1 neste caso
+					
+	-	Modificar o zigzag do trabalho do Luiz Hoffman
+	
+	RESOLVEMOS O CASO k=n-1
+		temos a solução que já funciona para o caso n ímpar
+		ela também funciona para n que não é múltiplo de 4
+		ORGANIZAR: no caso onde n é par, mas é múltiplo de 4
+			encontramos uma solução que troca a posição das arestas do tipo 1,2,3
+			da seguinte forma
+			no caso n=20,
+				a soluçao original sempre adiciona estas 3 arestas no 11
+				e aí trocamos essa solução pelo camionho 11 10 8 12 9 (a aresta do tipo 4 fica no mesmo lugar da solução até agora)
+				
+		Escrever uma prova formal disso.
+		
+25/08/2020
+	Resolvemos o caso k max sem querer de novo.
+		Precisamos escrever uma prova formal disso
+		a ideia são aqueles blocos que podem ser encaixados
+		Então rodamos arranging_minimizing_parallels(n,k,True) para n=7,8,9,10
+			 e aí mostramos que há um "bloco" que pode ser adicionado no meio de uma aresta de "corte" especial
+			 ex:	P=[0, 6, 2, 7, 1, 4, 3, 5] é uma solução para n=7
+			 		identificamos que {1,4} é uma dessas arestas de corte.
+			 			Isso divide o caminho em "final" (4,3,5) e "começo" (0,6,2,7,1)
+			    	e aí pegamos o final (4,3,5) somamos 2 em todos eles, obtendo (6,5,7)
+			    	pegamos a parte "grande" (i.e., maior que 7) do começo e somamos 4
+			    		i.e., transformamos (0,6,2,7,1) em (0,10,2,11,1)
+			    	Finalmente, encaixamos o bloco (8,4,9,3) no meio, obtendo
+			    		(0,10,2,11,1) + (8,4,9,3) + (6,5,7) = (0,10,2,11,1,8,4,9,3,6,5,7)
+			Algo parecido acontece com 
+				n=8: P=[0, 7, 1, 8, 3, 4, 6, 2, 5], com a aresta {8,3}
+				n=9: P=[0, 8, 1, 9, 3, 7, 2, 5, 6, 4], com a aresta {9,3}
+				n=10: P=[0, 9, 1, 10, 3, 8, 2, 6, 5, 7, 4], com a aresta {10,3}
+		Então já sabemos que vai funcionar, mas precisa provar,
+		precisa mostrar que uma solução nova obtida da antiga satisfaz as restrições
+		
